@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,10 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.catastro.app.model.Usuario;
 import com.catastro.app.service.impl.UsuarioServiceImpl;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UsuarioController {
 	
+	
+	BCryptPasswordEncoder passEncode= new BCryptPasswordEncoder();
+
 	@Autowired
 	private UsuarioServiceImpl usuarioService;
 
@@ -50,6 +56,7 @@ public class UsuarioController {
 			System.err.println("Se presentaron errores en el formulario!");
 			return "usuarios-form";
 		}
+		u.setHashContrasena(passEncode.encode(u.getHashContrasena()));
 		usuarioService.grabar(u);
 		return "redirect:/users";
 		
@@ -69,6 +76,39 @@ public class UsuarioController {
 		return "redirect:/users";
 		
 	}
+	
+	@GetMapping("/login")
+	public String login(Model model) {
+		//Usuario usuario = new Usuario();
+	    //model.addAttribute("loginError", true);
+		//model.addAttribute("usuario",usuario);
+		return "auth/login";
+	}
+	
+//	@PostMapping("/access")
+//	public String access(Usuario usuario, HttpSession session) {
+//		Optional<Usuario> user=usuarioService.findByCorreo(usuario.getCorreo());
+//		System.out.println(user);
+//		if (user.isPresent()) {
+//			var f = passEncode.matches(usuario.getHashContrasena(), user.get().getHashContrasena());
+//			if(f) {
+//				System.out.println("Match password");
+//				System.out.println("User id:"+user.get().getId());
+//				session.setAttribute("idusuario", user.get().getId());
+//			}
+//			
+//			
+//			if (user.get().getRol().equals("ADMIN")) {
+//				return "redirect:/administrador";
+//			}else {
+//				return "redirect:/";
+//			}
+//		}else {
+//			System.out.println("NO encontro usuario");
+//		}
+//		
+//		return "redirect:/";
+//	}
 	
 
 }
