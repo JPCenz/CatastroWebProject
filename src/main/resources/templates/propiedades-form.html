@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/index::head">
+</head>
+
+<body>
+	<div th:replace="layout/index::header"></div>
+	<nav th:replace="layout/index::navbar"></nav>
+	<div class="container mt-2">
+		<form th:object="${usuario}" method="post" th:action="@{/users/save}">
+			<input type="hidden" th:field="*{id}" id="id" />
+			<div class="card bg-light">
+				<div class="card-header bg-info text-white" th:text="${titulo}"></div>
+				<div class="card-body">
+					<div class="form-group row">
+						<label class="col-md-2" for="nombre">Nombres:</label> <input type="text" th:field="*{nombres}"
+							class="form-control form-control-sm col-md-10" id="nombres"
+							placeholder="Nombres del producto"> <small class="form-text text-danger col-md-2"
+							th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></small>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-2" for="apellidoPaterno">apellidoPaterno:</label> <input type="text"
+							th:field="*{apellidoPaterno}" class="form-control form-control-sm col-md-10" id="precio"
+							placeholder="Apellido Paterno"> <small class="form-text text-danger col-md-2"
+							th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></small>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-2" for="apellidoMaterno">apellidoMaterno</label> <input type="text"
+							th:field="*{apellidoMaterno}" class="form-control form-control-sm col-md-10" id="stock"
+							placeholder="apellido materno">
+						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('apellidoMaterno')}"
+							th:errors="*{apellidoMaterno}"></small>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-md-2" for="correo">Correo:</label> <input type="text" th:field="*{correo}"
+							class="form-control form-control-sm col-md-10" id="stock" placeholder="email@example.com">
+						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('correo')}"
+							th:errors="*{correo}"></small>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-md-2" for="correo">Password:</label> <input type="password"
+							th:field="*{hashContrasena}" class="form-control form-control-sm col-md-10"
+							id="hashContrasena" placeholder="contrasena">
+						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('hashContrasena')}"
+							th:errors="*{hashContrasena}"></small>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-md-2" for="correo">Rol:</label> <input type="text" th:field="*{rol}"
+							class="form-control form-control-sm col-md-10" id="stock" placeholder="admin">
+						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('rol')}"
+							th:errors="*{rol}"></small>
+					</div>
+				</div>
+				<div class="card-footer bg-light">
+					<input type="submit" class="btn btn-primary btn-sm" value="Guardar">
+				</div>
+			</div>
+		</form>
+	</div>
+	<footer th:replace="layout/index::footer"> </footer>
+</body>
+
+</html>
