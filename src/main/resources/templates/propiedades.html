@@ -7,6 +7,7 @@
   </head>
 
 <body>
+	
 	<div th:replace="layout/index::header"></div>
   <nav th:replace="layout/index::navbar"></nav>
   <div class="container">
@@ -96,37 +97,41 @@
         <table class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th> Propiedad</th>
+          <th>id</th>
+          <th>Titulo</th>
           <th>Descripcion</th>
           <th>Direccion</th>
           <th>Tipo</th>
           <th>Estado</th>
-          <th>Registro</th>
-          <th>Actualizacion</th>
+          <th>Creado</th>
+          <th>Actualizado</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><a href="#">1020302302</a></td>
-          <td>Descripcion de la propiedad</td>
-          <td>Jr. Amancaes 234 </td>
-          <td>Tipo</td>
-          <td>En tramite</td>
-          <td>2021-02-02</td>
-          <td>2021-02-02</td>
+        <tr th:each="p: ${propiedades}">
+          <th scope="row"><a th:text="${p.id}" th:href="@{property/get/{id}(id=${p.id})}" t></a></th>
+          <td th:text="${p.tituloPropiedad}">Descripcion de la propiedad</td>
+          <td th:text="${p.descripcion}">Jr. Amancaes 234 </td>
+          <td th:text="${p.direccion}">Tipo</td>
+          <td th:text="${p.tipoPropiedad}">En tramite</td>
+          <td th:text="${p.estado}">2021-02-02</td>
+          <td th:text="${p.createOn}">2021-02-02</td>
+          <td th:text="${p.updateOn}">2021-02-02</td>
+          <td><a class="btn btn-success btn-sn" 
+          		th:href="@{/property/edit/} + ${p.id}" 
+          		th:text="'Editar'"
+				title="Editar producto."></a>
+			  <a class="btn btn-danger btn-sn" 
+				th:href="@{/property/delete/} + ${p.id}"
+				th:text="'Eliminar'" title="Eliminar producto."
+				onclick="return confirm('Está seguro de eliminar el registro?');"></a>
+		  </td>
         </tr>
-        <tr>
-          <td><a href="#">1020302301</a></td>
-          <td>Descripcion de la propiedad</td>
-          <td>Jr. Amancaes 234 </td>
-          <td>Tipo</td>
-          <td>En tramite</td>
-          <td>2021-02-02</td>
-          <td>2021-02-02</td>
-        </tr>
+       
       </tbody>
     </table>
-        <img src="images/legend.png" style="width: 250px" class="rounded mx-auto d-block" alt="...">
+        
       </div>
     </div>
 
@@ -139,43 +144,5 @@
 
 </body>
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
-<script>
-  var map = L.map('mapid').setView([51.505, -0.09], 13);
-
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
-  L.marker([51.5, -0.09]).addTo(map)
-    .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-    .openPopup();
-
-
-
-  L.circle([51.508, -0.11], 500, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5
-  }).addTo(mymap).bindPopup("I am a circle.");
-
-  L.polygon([
-    [51.509, -0.08],
-    [51.503, -0.06],
-    [51.51, -0.047]
-  ]).addTo(mymap).bindPopup("I am a polygon.");
-
-
-  var popup = L.popup();
-
-  function onMapClick(e) {
-    popup
-      .setLatLng(e.latlng)
-      .setContent("You clicked the map at " + e.latlng.toString())
-      .openOn(mymap);
-  }
-
-  mymap.on('click', onMapClick);
-
-</script>
 
 </html>

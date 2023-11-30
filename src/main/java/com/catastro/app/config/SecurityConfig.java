@@ -22,12 +22,13 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)// lo desactive por que no me deja trabajar en postman
-				.authorizeHttpRequests(
-						authorize -> authorize.requestMatchers("/admin", "/admin/save", "/contenido/save").permitAll()
-								.requestMatchers("src/main/resources/templates", "/users/login", "/css/**","/img/**").permitAll()
-								.anyRequest().authenticated())
-				.formLogin(form -> form.loginPage("/users/login").permitAll().defaultSuccessUrl("/users"))
-				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"));
+//				.authorizeHttpRequests(
+//						authorize -> authorize.requestMatchers("/admin", "/admin/save", "/contenido/save").permitAll()
+//								.requestMatchers("src/main/resources/templates", "/users/login", "/css/**","/img/**").permitAll()
+//								.anyRequest().authenticated())
+//				.formLogin(form -> form.loginPage("/users/login").permitAll().defaultSuccessUrl("/users"))
+//				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"));
+		 .authorizeHttpRequests(authorize-> authorize.anyRequest().permitAll());//Temporalmente deshabilito la configuracion de seguridad
 
 		return http.build();
 	}
