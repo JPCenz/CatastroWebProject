@@ -1,5 +1,6 @@
 package com.catastro.app.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.locationtech.jts.geom.GeometryFactory;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.catastro.app.model.DatosCatastrales;
 import com.catastro.app.model.DatosGeoespaciales;
 import com.catastro.app.model.Propiedad;
 import com.catastro.app.repository.DatosGeoespacialesRepository;
+import com.catastro.app.repository.DatosCatastralesRepository;
 import com.catastro.app.service.DatosGeoespacialesService;
 import com.catastro.app.service.PropiedadService;
 import com.catastro.app.utility.WktUtil;
@@ -38,6 +41,9 @@ public class PropiedadController {
 	@Autowired
 	DatosGeoespacialesService datosGeoespacialesService;
 	
+	@Autowired
+	DatosCatastralesRepository catastroRepository;
+	
 	@PersistenceContext
     private EntityManager entityManager;
 	
@@ -54,15 +60,36 @@ public class PropiedadController {
 	
 	@GetMapping("/get/{id}")
 	public String getById(@PathVariable("id") Integer id, Model model) throws Exception {
+		var founded = false;
 		var propiedadfound = propiedadService.buscarPorId(id);
+		
 		if(!propiedadfound.isPresent()) {
-			throw new Error();
+			model.addAttribute("founded",founded);
+			return "index2";
 		}
-		Propiedad propiedad = propiedadfound.get();
-		var geos = datosRepository.findByPropiedadId(propiedad.getId());
+		founded = true;
+		model.addAttribute("founded",founded);
+		
+		Propiedad prop = propiedadfound.get();
+		var geos = datosRepository.findByPropiedadId(prop.getId());
 		var geo = geos.stream().findFirst();
 		var geoJson = geo.isPresent() && geo.get().getPoligono() != null ?  WktUtil.convertirMultiPolygonAGeoJson(geo.get().getPoligono()) : "";
 		model.addAttribute("geoJsonData", geoJson);
+		var catastro = catastroRepository.findByPropiedadId(prop.getId()).stream().findFirst();
+		var c =catastro.isPresent() ? catastro.get(): null;
+		model.addAttribute("catastro",c);
+		model.addAttribute("propiedad",prop);
+		System.out.println(c);
+		var ca = new DatosCatastrales();
+		ca.setAnioConstruccion(1998);
+		ca.setNumeroCatastral("00012312");
+		ca.setPropiedad(prop);
+		ca.setMetrosCuadrados(new BigDecimal(12312.32));
+		ca.setValorTerreno(new BigDecimal(123123));
+		ca.setValorTotal(new BigDecimal(343234));
+		//catastroRepository.save(ca);
+		
+		
 		
 		
 

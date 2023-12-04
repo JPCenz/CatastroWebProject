@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.catastro.app.model.Usuario;
 
+import jakarta.servlet.http.HttpSession;
+
 public interface UsuarioService {
 
 	List<Usuario> listarTodos();
@@ -20,6 +22,8 @@ public interface UsuarioService {
 	List<Usuario> findByNombreContaining(String nombre);
 
 	Optional<Usuario> findByCorreo(String email);
+	
+	public Usuario findBySession(HttpSession session);
 
 
 

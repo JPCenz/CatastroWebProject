@@ -22,12 +22,16 @@
 	<link th:href="@{/css/sticky-footer.css}" rel="stylesheet">
 
 	<!--leaflet-->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+	<!--	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
 		crossorigin="" />
 	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-		crossorigin=""></script>
+		crossorigin=""></script>-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
 <body>
@@ -35,8 +39,8 @@
 		<a class="navbar-brand" href="#!" style="color: black;"><img src="/img/logo5.png" class="" alt="s"
 				style="height:4rem"> </a>
 		<div>
-			 <span style="padding-right: 3rem;" sec:authentication="name">Bob</span>
-			<span><button type="button" class="btn btn-dark">Cerrar Sesion</button></span>
+			<span style="padding-right: 3rem;" sec:authentication="name">Bob</span>
+			<span><a th:href="@{/logout}" type="button" class="btn btn-dark">Cerrar Sesion</a></span>
 		</div>
 	</div>
 
@@ -48,43 +52,78 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:href="@{/propiedades}">Propiedades</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:href="@{/propietarios}">Propietarios</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:href="@{/auditorias}">Auditorias</a>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Busqueda
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="#">Propiedades</a>
-						<a class="dropdown-item" href="#">Auditorias</a>
-						<a class="dropdown-item" href="#">Propietarios</a>
-						<a class="dropdown-item" href="#">Licencias</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Something else here</a>
-					</div>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-				</li>
-			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
-		</div>
+
+		<div sec:authorize="isAuthenticated() and hasRole('ADMIN')"> <!-- Authorize ADMIN  start-->
+
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/propiedades}">Propiedades</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/propietarios}">Propietarios</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/auditorias}">Auditorias</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Busqueda
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#">Propiedades</a>
+							<a class="dropdown-item" href="#">Auditorias</a>
+							<a class="dropdown-item" href="#">Propietarios</a>
+							<a class="dropdown-item" href="#">Licencias</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</li>
+<!--					<li class="nav-item">
+						<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+					</li>-->
+				</ul>
+
+
+			</div>
+
+
+		</div> <!-- Authorize ADMIN  end-->
+
+		<div sec:authorize="isAuthenticated() and hasRole('USER')"> <!-- Authorize ADMIN  start-->
+
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
+					</li>
+
+					<li class="nav-item active">
+						<a class="nav-link" th:href="@{/app}">Busqueda Geografica <span
+								class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/app/view-user}">Usuario</a>
+					</li>
+<!--					<li class="nav-item">
+						<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+					</li>-->
+				</ul>
+
+
+			</div>
+
+
+		</div> <!-- Authorize ADMIN  end-->
+
+
 	</nav>
 	<div class="container">
 

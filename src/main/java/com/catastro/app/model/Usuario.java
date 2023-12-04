@@ -45,7 +45,7 @@ public class Usuario {
 	@Column(name = "hash_contrasena")
 	private String hashContrasena;
 	
-	@NotBlank(message = "is required")
+//	@NotBlank(message = "is required")
 	@Column(name = "rol")
 	private String rol;
 	

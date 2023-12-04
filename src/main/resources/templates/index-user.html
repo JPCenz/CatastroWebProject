@@ -1,0 +1,54 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/index::head"></head>
+
+<body>
+	<div th:replace="layout/index::header"></div>
+	<nav th:replace="layout/index::navbar"></nav>
+
+	<div class="container">
+
+		<div class="row border">
+			<div class="col-md-12 m-3">
+
+
+				<img th:src="@{/img/fondo1.jpg}" class="img-fluid" alt="Sample image">
+
+				<h2> </h2>
+				<h2 th:text="'Bienvenido , '+ ${user}"></h2>
+				<div class="d-flex align-items-center">
+
+					<div th:if="${#authorization.expression('isAuthenticated()')}">
+						<span th:text="'Rol: '"></span>
+
+						<p sec:authentication="principal.authorities"></p>
+					</div>
+
+					<div>
+					</div>
+
+				</div>
+
+
+
+				<span class="inline">Seleccione una Opción</span>
+				<a type="button" class="btn btn-success" th:href="@{/users/login}">Iniciar Sesion</a>
+
+				<a type="button" class="btn btn-warning" th:href="@{/register}">Registrarse</a>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-- footer -->
+	<footer th:replace="layout/index::footer">
+	</footer>
+
+</body>
+
+
+</html>
