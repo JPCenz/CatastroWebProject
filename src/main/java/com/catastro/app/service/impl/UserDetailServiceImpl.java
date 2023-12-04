@@ -16,7 +16,7 @@ import com.catastro.app.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailServiceImpl  implements UserDetailsService {
 
 	@Autowired
 	private UsuarioService usuarioService;
@@ -38,6 +38,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 					.password(u.getHashContrasena())
 					.roles(u.getRol())
 					.build();
+			
 		} else {
 			throw new UsernameNotFoundException("Usuario no encontrado");
 		}

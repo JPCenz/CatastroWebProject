@@ -53,8 +53,5 @@ public class DatosCatastrales {
 	private Propiedad propiedad;
 	
 	
-	
-	
-	
 
 }

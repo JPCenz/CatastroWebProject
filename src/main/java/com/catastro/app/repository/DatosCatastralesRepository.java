@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.catastro.app.model.DatosCatastrales;
 import com.catastro.app.model.Propiedad;
 
-interface DatosCatastralesRepository extends JpaRepository<DatosCatastrales, Integer> {
+public interface DatosCatastralesRepository extends JpaRepository<DatosCatastrales, Integer> {
 	List<DatosCatastrales> findByPropiedadId(Integer id);
 }

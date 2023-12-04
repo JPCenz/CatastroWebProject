@@ -7,7 +7,7 @@
 	<div th:replace="layout/index::header"></div>
 	<nav th:replace="layout/index::navbar"></nav>
 	
-	<div class="container">
+	<div class="container-fluid">
 
 		<div class="row border">
 			<div class="col-md-12">
@@ -15,7 +15,7 @@
 		</div>
 		<div class="row border" style="height: 600px">
 			<!--filters-->
-			<div class="col-md-3 border">
+			<div class="col-md-4 border">
 				<br>
 
 				<div class="accordion" id="accordionExample">
@@ -90,10 +90,15 @@
 			<div class="col-md-6 border">
 				<br>
 				<div id="mapid" style="width: 530px; height: 530px;"></div>
-				<p>HELLO WORLD</p>
+<!--				 <div sec:authorize="isAuthenticated()">
+            	Text visible only to authenticated users.
+            		<div sec:authentication="principal.authorities"></div>
+       			 </div>
+       			 <div sec:authentication="principal.authorities"></div>-->
+				
 			</div>
 			<!--info-->
-			<div class="col-md-3 border">
+			<div class="col-md-2 border">
 				
 				<br>
 				<h3>Detalles Catastralesss</h3>

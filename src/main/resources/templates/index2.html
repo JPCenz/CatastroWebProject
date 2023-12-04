@@ -6,7 +6,7 @@
 <body>
 	<div th:replace="layout/index::header"></div>
 	<nav th:replace="layout/index::navbar"></nav>
-	
+
 	<div class="container">
 
 		<div class="row border">
@@ -41,7 +41,7 @@
 										<input type="email" class="form-control" id="exampleFormControlInput1"
 											placeholder="34234242342532555">
 									</div>
-									
+
 									<button type="button" class="btn btn-success">Submit</button>
 								</form>
 							</div>
@@ -90,13 +90,14 @@
 			<div class="col-md-6 border">
 				<br>
 				<div id="mapid" style="width: 530px; height: 530px;"></div>
+				<p th:text="${founded}"></p>
 
-				
-				
+
+
 			</div>
 			<!--info-->
 			<div class="col-md-3 border">
-				
+
 				<br>
 				<h3>Detalles Catastralesss</h3>
 				<table class="table table-striped table-bordered">
@@ -142,44 +143,44 @@
 				<img src="images/legend.png" style="width: 250px" class="rounded mx-auto d-block" alt="...">
 			</div>
 		</div>
-		
+
 		<div class="row border">
 			<div class="col-md-12">
-				 
-        <br>
-        <table class="table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th> Propiedad</th>
-          <th>Descripcion</th>
-          <th>Direccion</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Registro</th>
-          <th>Actualizacion</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><a href="#">1020302302</a></td>
-          <td>Descripcion de la propiedad</td>
-          <td>Jr. Amancaes 234 </td>
-          <td>Tipo</td>
-          <td>En tramite</td>
-          <td>2021-02-02</td>
-          <td>2021-02-02</td>
-        </tr>
-        <tr>
-          <td><a href="#">1020302301</a></td>
-          <td>Descripcion de la propiedad</td>
-          <td>Jr. Amancaes 234 </td>
-          <td>Tipo</td>
-          <td>En tramite</td>
-          <td>2021-02-02</td>
-          <td>2021-02-02</td>
-        </tr>
-      </tbody>
-    </table>
+
+				<br>
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th> Propiedad</th>
+							<th>Descripcion</th>
+							<th>Direccion</th>
+							<th>Tipo</th>
+							<th>Estado</th>
+							<th>Registro</th>
+							<th>Actualizacion</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="#">1020302302</a></td>
+							<td>Descripcion de la propiedad</td>
+							<td>Jr. Amancaes 234 </td>
+							<td>Tipo</td>
+							<td>En tramite</td>
+							<td>2021-02-02</td>
+							<td>2021-02-02</td>
+						</tr>
+						<tr>
+							<td><a href="#">1020302301</a></td>
+							<td>Descripcion de la propiedad</td>
+							<td>Jr. Amancaes 234 </td>
+							<td>Tipo</td>
+							<td>En tramite</td>
+							<td>2021-02-02</td>
+							<td>2021-02-02</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 
@@ -192,33 +193,57 @@
 
 </body>
 <script th:inline="javascript">
-        /*<![CDATA[*/
-        var geoJsonData = [[${geoJsonData}]];
-        console.log(geoJsonData)
+	/*<![CDATA[*/
+	var geoJsonData = [[${geoJsonData}]];
+	console.log(geoJsonData)
         // Utiliza geoJsonData para renderizar tu mapa aquí
-        /*]]>*/
-    </script>
+	/*]]>*/
+</script>
 <script>
-	var map = L.map('mapid').setView([-14.970590,-71.257532], 13);
 
-	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	var wmsLayer = L.tileLayer.wms('http://localhost:7777/geoserver/curso/wms?service=WMS&', {
+		layers: 'CUSCO_PREDIO_RURAL',
+		transparent: true,
+		format: 'image/png',
+		
+		
+	});
+	var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+		maxZoom: 20,
+		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+	});
+
+	var google = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+		maxZoom: 20,
+		subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+	})
+	console.log(wmsLayer)
+	var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
+	});
 
-	L.marker([-14.970590,-71.257532]).addTo(map)
+	var baseMaps = {
+		"OpenStreetMap": osm,
+		"<b>Google Satellite</b>": google,
+		"Google Hybrid": googleHybrid
+	};
+	var overlayMaps = {
+    "Predios": wmsLayer
+};
+	var map = L.map('mapid', {
+		center: [-14.970590, -71.257532],
+		zoom: 15,
+		layers: [googleHybrid,google,osm,wmsLayer]
+
+	});
+
+	var layerControl = L.control.layers(baseMaps,overlayMaps).addTo(map);
+
+	L.marker([-14.970590, -71.257532]).addTo(map)
 		.bindPopup('A pretty CSS popup.<br> Easily customizable.')
 		.openPopup();
 
-	L.geoJSON(JSON.parse(geoJsonData),{
-    style: function(feature) {
-        return {color: feature.properties.color};
-    },
-    onEachFeature: function(feature, layer) {
-        if (feature.properties && feature.properties.popupContent) {
-            layer.bindPopup(feature.properties.popupContent);
-        }
-    }
-}).addTo(map);
+	L.geoJSON(JSON.parse(geoJsonData)).addTo(map);
 
 	L.circle([51.508, -0.11], 500, {
 		color: 'red',

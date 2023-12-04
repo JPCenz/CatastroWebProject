@@ -14,14 +14,14 @@
 				<div class="card-header bg-info text-white" th:text="${titulo}"></div>
 				<div class="card-body">
 					<div class="form-group row">
-						<label class="col-md-2" for="nombre">Nombres:</label> <input type="text" th:field="*{nombres}"
+						<label class="col-md-2" for="nombres">Nombres:</label> <input type="text" th:field="*{nombres}"
 							class="form-control form-control-sm col-md-10" id="nombres"
 							placeholder="Nombres del producto"> <small class="form-text text-danger col-md-2"
 							th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></small>
 					</div>
 					<div class="form-group row">
 						<label class="col-md-2" for="apellidoPaterno">apellidoPaterno:</label> <input type="text"
-							th:field="*{apellidoPaterno}" class="form-control form-control-sm col-md-10" id="precio"
+							th:field="*{apellidoPaterno}" class="form-control form-control-sm col-md-10" id="apellidoPaterno"
 							placeholder="Apellido Paterno"> <small class="form-text text-danger col-md-2"
 							th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></small>
 					</div>
@@ -41,7 +41,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-md-2" for="correo">Password:</label> <input type="password"
+						<label class="col-md-2" for="contrasena">Password:</label> <input type="password"
 							th:field="*{hashContrasena}" class="form-control form-control-sm col-md-10"
 							id="hashContrasena" placeholder="contrasena">
 						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('hashContrasena')}"
@@ -49,8 +49,13 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-md-2" for="correo">Rol:</label> <input type="text" th:field="*{rol}"
-							class="form-control form-control-sm col-md-10" id="stock" placeholder="admin">
+						<label class="col-md-2" for="correo">Rol:</label> <select type="text" th:field="*{rol}"
+							class="form-control form-control-sm col-md-10" id="rol">
+<!--							<option th:each="categoria:${categorias}" th:value="${categoria.id}"
+								th:text="${categoria.nombre}" />-->
+							<option value="ADMIN">Admin</option>
+							<option value="USER">User</option>
+						</select>
 						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('rol')}"
 							th:errors="*{rol}"></small>
 					</div>

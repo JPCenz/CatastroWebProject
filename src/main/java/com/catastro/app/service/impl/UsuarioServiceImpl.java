@@ -10,6 +10,8 @@ import com.catastro.app.model.Usuario;
 import com.catastro.app.repository.UsuarioRepository;
 import com.catastro.app.service.UsuarioService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
@@ -56,6 +58,20 @@ public class UsuarioServiceImpl implements UsuarioService {
 		// TODO Auto-generated method stub
 		return usuarioRepository.findByCorreo(email);
 	}
+	
+	public Usuario findBySession(HttpSession session) {
+		// TODO Auto-generated method stub
+		var  id = session.getAttribute("idusuario");
+		var actualId = id != null ? Integer.parseInt(id.toString()) : null;
+		var user =  actualId != null ? usuarioRepository.findById(actualId) : null;
+		if(user.isPresent()) {
+			return  user.get();
+		}
+		return  null;
+		
+	}
+	
+
 
 	
 

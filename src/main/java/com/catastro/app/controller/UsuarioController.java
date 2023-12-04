@@ -56,9 +56,24 @@ public class UsuarioController {
 			System.err.println("Se presentaron errores en el formulario!");
 			return "usuarios-form";
 		}
+		if(u.getRol()== null) { u.setRol("USER");}
 		u.setHashContrasena(passEncode.encode(u.getHashContrasena()));
 		usuarioService.grabar(u);
 		return "redirect:/users";
+		
+	}
+	
+	@RequestMapping(path =   "/register", method = RequestMethod.POST)
+	public String register(@Validated @ModelAttribute Usuario u, BindingResult result, Model model) throws Exception {
+		if (result.hasErrors()) {
+			System.out.println(result.getAllErrors());
+			System.err.println("Se presentaron errores en el formulario!");
+			return "auth/register";
+		}
+		if(u.getRol()== null) { u.setRol("USER");}
+		u.setHashContrasena(passEncode.encode(u.getHashContrasena()));
+		usuarioService.grabar(u);
+		return "redirect:/";
 		
 	}
 	
@@ -84,6 +99,8 @@ public class UsuarioController {
 		//model.addAttribute("usuario",usuario);
 		return "auth/login";
 	}
+	
+
 	
 //	@PostMapping("/access")
 //	public String access(Usuario usuario, HttpSession session) {
