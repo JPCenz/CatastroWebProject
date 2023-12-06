@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/index::head">
+</head>
+
+<body>
+	<div th:replace="layout/index::header"></div>
+	<nav th:replace="layout/index::navbar"></nav>
+	<div class="container-fluid mt-2" style="padding-left: 5rem; padding-right: 5rem;">
+		<div class="row ">
+
+			<div class="col-md-8">
+				<form id="formularioConPasos" th:object="${propiedad}" method="post" th:action="@{/property/save}">
+					<!-- Navegación de pasos -->
+					<div class="step-navigation card-body">
+						<button type="button" class="btn btn-primary" onclick="showStep(1)">Datos de Propiedad</button>
+						<button type="button" class="btn btn-secondary" onclick="showStep(2)">Datos Catastrales</button>
+						<button type="button" class="btn btn-secondary" onclick="showStep(3)">Propietarios</button>
+					</div>
+
+					<!-- Paso 1 -->
+					<div class="step card card bg-light " id="step1">
+						<!-- Contenido del Paso 1 -->
+						<div class="card-body">
+							<!-- Campos del formulario para el Paso 1 -->
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="tituloPropiedad">titulo Propiedad:</label>
+								<input type="text" th:field="*{tituloPropiedad}"
+									class="form-control form-control-sm col-md-6" id="tituloPropiedad"
+									placeholder="tituloPropiedad"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('tituloPropiedad')}"
+									th:errors="*{tituloPropiedad}"></small>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="descripcion">descripcion :</label>
+								<input type="text" th:field="*{descripcion}"
+									class="form-control form-control-sm col-md-6" id="descripcion"
+									placeholder="descripcion"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="direccion">direccion :</label>
+								<input type="text" th:field="*{direccion}" class="form-control form-control-sm col-md-6"
+									id="direccion" placeholder="descripcion"> <small
+									class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('direccion')}"
+									th:errors="*{direccion}"></small>
+							</div>
+
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="tipoPropiedad">tipoPropiedad:</label>
+								<select type="text" th:field="*{tipoPropiedad}"
+									class="form-control form-control-sm col-md-6" id="rol">
+									<!--<option th:each="categoria:${categorias}" th:value="${categoria.id}"
+								th:text="${categoria.nombre}" />-->
+									<option value="Tipo1">Tipo1</option>
+									<option value="Tipo2">Tipo2</option>
+								</select>
+								<small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('tipoPropiedad')}" th:errors="*{tipoPropiedad}"></small>
+							</div>
+
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="estado">estado:</label>
+								<input type="text" th:field="*{estado}" class="form-control form-control-sm col-md-6"
+									id="estado" placeholder="estado"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></small>
+							</div>
+							<button type="button" class="btn btn-primary" onclick="showStep(2)">Siguiente</button>
+
+						</div>
+
+					</div>
+
+					<!-- Paso 2 -->
+					<div class="step card card bg-light" id="step2" style="display: none;">
+						<!-- Contenido del Paso 2 -->
+						<div class="card-body">
+							<!-- Campos del formulario para el Paso 2 -->
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="tituloPropiedad">numeroCatastral</label>
+								<input type="text" th:field="*{datoCatastral.numeroCatastral}"
+									class="form-control form-control-sm col-md-6" id="numeroCatastral"
+									placeholder="numeroCatastral"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('datoCatastral.numeroCatastral')}"
+									th:errors="*{datoCatastral.numeroCatastral}"></small>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="valorTerreno">valorTerreno :</label>
+								<input type="text" th:field="*{datoCatastral.valorTerreno}"
+									class="form-control form-control-sm col-md-6" id="valorTerreno"
+									placeholder="valorTerreno"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('datoCatastral.valorTerreno')}"
+									th:errors="*{datoCatastral.valorTerreno}"></small>
+							</div>
+
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="valorConstruccion">valorConstruccion
+									:</label>
+								<input type="text" th:field="*{datoCatastral.valorConstruccion}"
+									class="form-control form-control-sm col-md-6" id="valorConstruccion"
+									placeholder="valorConstruccion"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('datoCatastral.valorConstruccion')}"
+									th:errors="*{datoCatastral.valorConstruccion}"></small>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="valorConstruccion">valorTotal :</label>
+								<input type="text" th:field="*{datoCatastral.valorTotal}"
+									class="form-control form-control-sm col-md-6" id="valorTotal"
+									placeholder="valorTotal"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('datoCatastral.valorTotal')}"
+									th:errors="*{datoCatastral.valorTotal}"></small>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="anioConstruccion">Año Construcción :</label>
+								<input type="text" th:field="*{datoCatastral.anioConstruccion}"
+									class="form-control form-control-sm col-md-6" id="valorTotal"
+									placeholder="anioConstruccion"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('datoCatastral.anioConstruccion')}"
+									th:errors="*{datoCatastral.anioConstruccion}"></small>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="metrosCuadrados">metrosCuadrados :</label>
+								<input type="text" th:field="*{datoCatastral.metrosCuadrados}"
+									class="form-control form-control-sm col-md-6" id="metrosCuadrados"
+									placeholder="metrosCuadrados"> <small class="form-text text-danger col-md-2"
+									th:if="${#fields.hasErrors('datoCatastral.metrosCuadrados')}"
+									th:errors="*{datoCatastral.metrosCuadrados}"></small>
+							</div>
+
+
+							<button type="button" class="btn btn-secondary" onclick="showStep(1)">Anterior</button>
+							<button type="button" class="btn btn-primary" onclick="showStep(3)">Siguiente</button>
+
+						</div>
+
+
+					</div>
+
+					<!-- Paso 3 -->
+					<div class="step card card bg-light" id="step3" style="display: none;">
+						<!-- Contenido del Paso 3 -->
+						<div class="card-body">
+							<!-- Campos del formulario para el Paso 3 -->
+							<div class="form-group row">
+								<label class="col-md-4 col-form-label" for="stringWKT">stringWKT Geometry:</label>
+								<textarea type="text" th:field="*{stringWKT}" class="form-control form-control-sm col-md-6"
+									id="stringWKT" placeholder="stringWKT" rows="5" cols="30"></textarea>
+									<small class="form-text text-danger col-md-2"
+										th:if="${#fields.hasErrors('stringWKT')}" th:errors="*{stringWKT}"></small>
+							</div>
+							<button type="button" class="btn btn-secondary" onclick="showStep(2)">Anterior</button>
+							<button type="submit" class="btn btn-success">Enviar</button>
+						</div>
+
+					</div>
+
+
+
+
+				</form>
+				<h4 th:if="${#fields.hasErrors('${propiedad.*}')}">Validacion:</h4>
+				<ul>
+					<li class="text-danger" th:each="err : ${#fields.errors('propiedad.*')}" th:text="${err}" />
+				</ul>
+			</div>
+
+
+
+
+			<div class="col-md-4 border">
+				HOLS
+			</div>
+		</div>
+		<!--		<form th:object="${propiedad}" method="post" th:action="@{/propiedad/save}">-->
+		<!--			<input type="hidden" th:field="*{id}" id="id" />-->
+		<!--			<div class="card bg-light">-->
+		<!--				<div class="card-header bg-info text-white" th:text="${titulo}"></div>-->
+		<!--				<div class="card-body">-->
+		<!--					<div class="form-group row">-->
+		<!--						<label class="col-md-2" for="tituloPropiedad">tituloPropiedad:</label> <input type="text"-->
+		<!--							th:field="*{tituloPropiedad}" class="form-control form-control-sm col-md-10"-->
+		<!--							id="tituloPropiedad" placeholder="tituloPropiedad"> <small-->
+		<!--							class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('tituloPropiedad')}"-->
+		<!--							th:errors="*{tituloPropiedad}"></small>-->
+		<!--					</div>-->
+		<!--					<div class="form-group row">-->
+		<!--						<label class="col-md-2" for="descripcion">descripcion:</label> <input type="text"-->
+		<!--							th:field="*{descripcion}" class="form-control form-control-sm col-md-10" id="descripcion"-->
+		<!--							placeholder="descripcion"> <small class="form-text text-danger col-md-2"-->
+		<!--							th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>-->
+		<!--					</div>-->
+		<!--					<div class="form-group row">-->
+		<!--						<label class="col-md-2" for="apellidoMaterno">direccion</label> <input type="text"-->
+		<!--							th:field="*{direccion}" class="form-control form-control-sm col-md-10" id="stock"-->
+		<!--							placeholder="direccion">-->
+		<!--						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('direccion')}"-->
+		<!--							th:errors="*{direccion}"></small>-->
+		<!--					</div>-->
+
+		<!--					<div class="form-group row">-->
+		<!--						<label class="col-md-2" for="tipoPropiedad">tipoPropiedad:</label> <input type="text"-->
+		<!--							th:field="*{tipoPropiedad}" class="form-control form-control-sm col-md-10" id="stock"-->
+		<!--							placeholder="tipoPropiedad">-->
+		<!--						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('tipoPropiedad')}"-->
+		<!--							th:errors="*{tipoPropiedad}"></small>-->
+		<!--					</div>-->
+
+		<!--					<div class="form-group row">-->
+		<!--						<label class="col-md-2" for="estado">estado:</label> <input type="text" th:field="*{estado}"-->
+		<!--							class="form-control form-control-sm col-md-10" id="estado" placeholder="contrasena">-->
+		<!--						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('estado')}"-->
+		<!--							th:errors="*{estado}"></small>-->
+		<!--					</div>-->
+
+		<!--					<div class="form-group row">-->
+		<!--						<label class="col-md-2" for="tipoPropiedad">tipoPropiedad:</label>-->
+		<!--						<select type="text" th:field="*{tipoPropiedad}" class="form-control form-control-sm col-md-10"-->
+		<!--							id="rol">-->
+		<!--							<option th:each="categoria:${categorias}" th:value="${categoria.id}"-->
+		<!--								th:text="${categoria.nombre}" />-->
+		<!--							<option value="ADMIN">Admin</option>-->
+		<!--							<option value="USER">User</option>-->
+		<!--						</select>-->
+		<!--						<small class="form-text text-danger col-md-2" th:if="${#fields.hasErrors('tipoPropiedad')}"-->
+		<!--							th:errors="*{tipoPropiedad}"></small>-->
+		<!--					</div>-->
+		<!--				</div>-->
+
+
+
+
+
+		<!--				<div class="card-footer bg-light">-->
+		<!--					<input type="submit" class="btn btn-primary btn-sm" value="Guardar">-->
+		<!--				</div>-->
+		<!--			</div>-->
+		<!--		</form>-->
+
+
+	</div>
+	<footer th:replace="layout/index::footer"> </footer>
+</body>
+<script>
+	function showStep(stepNumber) {
+		var steps = document.getElementsByClassName('step');
+		for (var i = 0; i < steps.length; i++) {
+			steps[i].style.display = 'none';
+		}
+		document.getElementById('step' + stepNumber).style.display = 'block';
+	}
+</script>
+
+</html>

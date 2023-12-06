@@ -46,7 +46,7 @@ public class DatosGeoespaciales implements Serializable{
 	@Column(columnDefinition = "geometry(MULTIPOLYGON,4326)")
 	private MultiPolygon poligono;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_propiedad" ,foreignKey = @ForeignKey(name = "fk_propiedad_datos geoespaciales"))
 	private Propiedad propiedad;
 	
