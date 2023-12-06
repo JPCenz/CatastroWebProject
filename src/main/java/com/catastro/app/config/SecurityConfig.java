@@ -25,9 +25,9 @@ public class SecurityConfig {
 				.authorizeHttpRequests(
 						authorize -> authorize.requestMatchers("/admin", "/admin/save", "/contenido/save").permitAll()
 								.requestMatchers("src/main/resources/templates", "/users/login", "/css/**", "/img/**",
-										"/register","/home")
+										"/register", "/home")
 								.permitAll().anyRequest().authenticated())
-				.formLogin(form -> form.loginPage("/users/login").permitAll().defaultSuccessUrl("/users"))
+				.formLogin(form -> form.loginPage("/users/login").permitAll().defaultSuccessUrl("/"))
 				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"));
 		// .authorizeHttpRequests(authorize->
 		// authorize.anyRequest().permitAll());//Temporalmente deshabilito la
