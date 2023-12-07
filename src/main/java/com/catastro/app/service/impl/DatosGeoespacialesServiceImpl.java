@@ -9,12 +9,20 @@ import org.springframework.stereotype.Service;
 import com.catastro.app.model.DatosGeoespaciales;
 import com.catastro.app.repository.DatosGeoespacialesRepository;
 import com.catastro.app.service.DatosGeoespacialesService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
 @Service
 public class DatosGeoespacialesServiceImpl implements DatosGeoespacialesService {
-	
+
 	@Autowired
 	DatosGeoespacialesRepository repository;
-	
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Override
 	public List<DatosGeoespaciales> listarTodos() {
 		return repository.findAll();
@@ -36,7 +44,8 @@ public class DatosGeoespacialesServiceImpl implements DatosGeoespacialesService 
 	@Override
 	public void eliminar(Integer id) {
 		repository.deleteById(id);
-		
+
 	}
+
 
 }

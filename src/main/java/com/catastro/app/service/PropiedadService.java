@@ -17,6 +17,8 @@ public interface PropiedadService {
 
 	void eliminar(Integer id);
 	
-	HashMap<String, Object> grabarDTO(PropiedadFormDTO p);
+	HashMap<String, Object> grabarDTO(PropiedadFormDTO p) throws Exception;
+	
+	List<Propiedad> findByIdContaining(String id);
 
 }
