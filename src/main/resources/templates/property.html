@@ -24,7 +24,7 @@
 							<h2 class="mb-0">
 								<button class="btn btn-link" type="button" data-toggle="collapse"
 									data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-									Datos Geoespaciales
+									Datos Geoespaciales WGS-84
 								</button>
 							</h2>
 						</div>
@@ -35,11 +35,11 @@
 								<form>
 									<div class="form-group">
 										<label for="exampleFormControlInput1">Coordenadas Este</label>
-										<input type="email" class="form-control" id="exampleFormControlInput1"
-											placeholder="23423565475678658">
+										<input type="text" class="form-control" id="exampleFormControlInput1"
+											th:field="${coordenadas.latitud}">
 										<label for="exampleFormControlInput1">Coordenadas Oeste</label>
-										<input type="email" class="form-control" id="exampleFormControlInput1"
-											placeholder="34234242342532555">
+										<input type="text" class="form-control" id="exampleFormControlInput1"
+											 th:field="${coordenadas.longitud}">
 									</div>
 
 									<button type="button" class="btn btn-success">Submit</button>
@@ -99,7 +99,7 @@
 			<div class="col-md-3 border">
 
 				<br>
-				<h3>Detalles Catastralesss</h3>
+				<h3>Detalles Catastrales</h3>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
@@ -115,27 +115,27 @@
 						</tr>
 						<tr>
 							<th scope="row">Nro Catastral</th>
-							<td>003423-23423</td>
+							<td th:text="${catastro.numeroCatastral}">003423-23423</td>
 
 						</tr>
 						<tr>
 							<th scope="row">Valor Terreno</th>
-							<td>34400.3</td>
+							<td th:text="${catastro.valorTerreno}">34400.3</td>
 
 						</tr>
 						<tr>
 							<th scope="row">Valor Total</th>
-							<td>34400.3</td>
+							<td th:text="${catastro.valorTotal}">34400.3</td>
 
 						</tr>
 						<tr>
 							<th scope="row">Año Construccion</th>
-							<td>34400.3</td>
+							<td th:text="${catastro.anioConstruccion}">34400.3</td>
 
 						</tr>
 						<tr>
-							<th scope="row">Area Total</th>
-							<td>34400.3</td>
+							<th scope="row">Area Total m2</th>
+							<td th:text="${catastro.metrosCuadrados}">34400.3</td>
 
 						</tr>
 					</tbody>
@@ -162,23 +162,15 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><a href="#">1020302302</a></td>
-							<td>Descripcion de la propiedad</td>
-							<td>Jr. Amancaes 234 </td>
-							<td>Tipo</td>
-							<td>En tramite</td>
-							<td>2021-02-02</td>
-							<td>2021-02-02</td>
+							<td><a th:text="${propiedad.id}" href="#">1020302302</a></td>
+							<td th:text="${propiedad.descripcion}">Descripcion de la propiedad</td>
+							<td th:text="${propiedad.direccion}">Jr. Amancaes 234 </td>
+							<td th:text="${propiedad.tipoPropiedad}">Tipo</td>
+							<td th:text="${propiedad.estado}">En tramite</td>
+							<td th:text="${propiedad.updateOn}">2021-02-02</td>
+							<td th:text="${propiedad.createOn}">2021-02-02</td>
 						</tr>
-						<tr>
-							<td><a href="#">1020302301</a></td>
-							<td>Descripcion de la propiedad</td>
-							<td>Jr. Amancaes 234 </td>
-							<td>Tipo</td>
-							<td>En tramite</td>
-							<td>2021-02-02</td>
-							<td>2021-02-02</td>
-						</tr>
+						
 					</tbody>
 				</table>
 			</div>
@@ -189,13 +181,17 @@
 
 	<!-- footer -->
 	<footer th:replace="layout/index::footer">
+		
 	</footer>
 
 </body>
 <script th:inline="javascript">
 	/*<![CDATA[*/
 	var geoJsonData = [[${geoJsonData}]];
-	console.log(geoJsonData)
+	var lat = [[${coordenadas.latitud}]] ?? -71.257532;
+	var long = [[${coordenadas.longitud}]] ??  -14.970590;
+	console.log(geoJsonData);
+	console.log(lat,long);
         // Utiliza geoJsonData para renderizar tu mapa aquí
 	/*]]>*/
 </script>
@@ -231,7 +227,7 @@
     "Predios": wmsLayer
 };
 	var map = L.map('mapid', {
-		center: [-14.970590, -71.257532],
+		center: [lat, long],
 		zoom: 15,
 		layers: [googleHybrid,google,osm,wmsLayer]
 
@@ -239,26 +235,17 @@
 
 	var layerControl = L.control.layers(baseMaps,overlayMaps).addTo(map);
 
-	L.marker([-14.970590, -71.257532]).addTo(map)
+	L.marker([long, lat]).addTo(map)
 		.bindPopup('A pretty CSS popup.<br> Easily customizable.')
 		.openPopup();
 
 	L.geoJSON(JSON.parse(geoJsonData)).addTo(map);
 
-	L.circle([51.508, -0.11], 500, {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5
-	}).addTo(map).bindPopup("I am a circle.");
-
-	L.polygon([
-		[51.509, -0.08],
-		[51.503, -0.06],
-		[51.51, -0.047]
-	]).addTo(map).bindPopup("I am a polygon.");
 
 
 	var popup = L.popup();
+	
+	map.panTo(new L.LatLng(long, lat));
 
 	function onMapClick(e) {
 		popup

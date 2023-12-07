@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
 import jakarta.persistence.CascadeType;
@@ -45,6 +46,9 @@ public class DatosGeoespaciales implements Serializable{
 	
 	@Column(columnDefinition = "geometry(MULTIPOLYGON,4326)")
 	private MultiPolygon poligono;
+	
+	 @Column(columnDefinition = "geometry(Point, 4326)")
+	private Point coordenadas;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_propiedad" ,foreignKey = @ForeignKey(name = "fk_propiedad_datos geoespaciales"))
