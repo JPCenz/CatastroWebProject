@@ -14,4 +14,5 @@ public interface DatosGeoespacialesService {
 	DatosGeoespaciales grabar(DatosGeoespaciales datos) throws Exception;
 
 	void eliminar(Integer id);
+
 }

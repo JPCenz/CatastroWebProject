@@ -14,6 +14,7 @@ import com.catastro.app.repository.DatosCatastralesRepository;
 import com.catastro.app.repository.DatosGeoespacialesRepository;
 import com.catastro.app.repository.PropiedadRepository;
 import com.catastro.app.service.DatosCatastralesService;
+import com.catastro.app.service.DatosGeoespacialesService;
 import com.catastro.app.service.PropiedadService;
 
 import jakarta.transaction.Transactional;
@@ -29,6 +30,9 @@ public class PropiedadServiceImpl implements PropiedadService {
 	
 	@Autowired
 	DatosGeoespacialesRepository geoRepository;
+	
+	@Autowired
+	DatosGeoespacialesService geoService;
 		
 	@Autowired
 	PropiedadRepository propiedadRepository;
@@ -72,7 +76,12 @@ public class PropiedadServiceImpl implements PropiedadService {
 		
 		DatosGeoespaciales geo = new DatosGeoespaciales();
 		geo.setPropiedad(propiedad);
-		geoRepository.save(geo);
+		try {
+			geoService.grabar(geo);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		var catastral = catastroService.fromDTO(p.getDatoCatastral()); 
 		catastral.setPropiedad(propiedad);
 		catastroRepository.save(catastral);
@@ -84,5 +93,10 @@ public class PropiedadServiceImpl implements PropiedadService {
 		
 		return map;
 	}
+	
+	public List<Propiedad> findByIdContaining(String id){
+		return propiedadRepository.findByIdContaining(id);
+		
+	};
 
 }

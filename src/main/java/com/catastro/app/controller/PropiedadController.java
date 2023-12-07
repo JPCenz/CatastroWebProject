@@ -1,10 +1,12 @@
 package com.catastro.app.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.catastro.app.model.CoordenadasDTO;
 import com.catastro.app.model.DatosCatastrales;
 import com.catastro.app.model.DatosGeoespaciales;
 import com.catastro.app.model.Propiedad;
@@ -55,8 +59,19 @@ public class PropiedadController {
 	private EntityManager entityManager;
 
 	@GetMapping
-	public String getAll(Model model) throws ParseException {
-		List<Propiedad> propiedades = propiedadService.listarTodos();
+	public String getAll(Model model, @RequestParam(name = "search", required = false) String search)
+			throws ParseException {
+		List<Propiedad> propiedades = new ArrayList<Propiedad>();
+		if (search != null && convertirStringAInteger(search) != null) {
+			var propiedad = propiedadService.buscarPorId(Integer.parseInt(search));
+			if(propiedad.isPresent())  propiedades.add(propiedad.get());
+			
+			model.addAttribute("propiedades", propiedades);
+			System.out.println(propiedades);
+			return "propiedades";
+		}
+
+		propiedades = propiedadService.listarTodos();
 		model.addAttribute("propiedades", propiedades);
 //		var d = new DatosGeoespaciales();
 //		var p = WktUtil.crearPoligonoDesdeWKT("MULTIPOLYGON(((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
@@ -85,20 +100,22 @@ public class PropiedadController {
 				: "";
 		model.addAttribute("geoJsonData", geoJson);
 		var catastro = catastroRepository.findByPropiedadId(prop.getId()).stream().findFirst();
-		var c = catastro.isPresent() ? catastro.get() : null;
+		var c = catastro.isPresent() ? catastro.get() : new DatosCatastrales();
 		model.addAttribute("catastro", c);
 		model.addAttribute("propiedad", prop);
-		System.out.println(c);
-		var ca = new DatosCatastrales();
-		ca.setAnioConstruccion(1998);
-		ca.setNumeroCatastral("00012312");
-		ca.setPropiedad(prop);
-		ca.setMetrosCuadrados(new BigDecimal(12312.32));
-		ca.setValorTerreno(new BigDecimal(123123));
-		ca.setValorTotal(new BigDecimal(343234));
-		// catastroRepository.save(ca);
+		var coor = geo.isPresent() && geo.get().getPoligono() != null ? geo.get().getPoligono().getCentroid() : null;
+		var coordenadas = new CoordenadasDTO();
+		if (coor != null) {
+			coordenadas = new CoordenadasDTO(coor.getX(), coor.getY());
 
-		return "index2";
+			System.out.println(coordenadas);
+		}
+		model.addAttribute("coordenadas", coordenadas);
+
+		System.out.println(coor);
+		System.out.println(c);
+
+		return "property";
 	}
 
 	@GetMapping("/new")
@@ -109,19 +126,20 @@ public class PropiedadController {
 	}
 
 	@PostMapping("/save")
-	public String save(@Validated @ModelAttribute(name = "propiedad") PropiedadFormDTO propiedad, BindingResult result, Model model) {
+	public String save(@Validated @ModelAttribute(name = "propiedad") PropiedadFormDTO propiedad, BindingResult result,
+			Model model) throws Exception {
 		System.out.println(propiedad);
 		if (result.hasErrors()) {
 			System.err.println("Se presentaron errores en el formulario!");
 			System.err.println(result.getAllErrors());
 			return "propiedad-form";
 		}
-		var map =propiedadService.grabarDTO(propiedad);
+		var map = propiedadService.grabarDTO(propiedad);
 		System.out.println(map);
 		System.out.println(map.get("geo"));
 		DatosGeoespaciales g = (DatosGeoespaciales) map.get("geo");
 		try {
-			MultiPolygon s =WktUtil.crearPoligonoDesdeWKT(propiedad.getStringWKT());
+			MultiPolygon s = WktUtil.crearPoligonoDesdeWKT(propiedad.getStringWKT());
 			g.setPoligono(s);
 			datosGeoespacialesService.grabar(g);
 			System.out.println(s);
@@ -129,10 +147,19 @@ public class PropiedadController {
 			result.addError(new ObjectError("propiedad", "error al convertir WKT STRING"));
 			return "propiedad-form";
 		}
-		
+
 		model.addAttribute("propiedad", propiedad);
 
-
 		return "redirect:/property";
+	}
+	
+	
+	private Integer convertirStringAInteger(String str) {
+	    try {
+	        return Integer.parseInt(str);
+	    } catch (NumberFormatException e) {
+	        // Manejar la excepción, por ejemplo, devolver null o un valor predeterminado
+	        return null; // o cualquier otro valor predeterminado
+	    }
 	}
 }
