@@ -1,0 +1,111 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/index::head"></head>
+
+<body>
+	<div th:replace="layout/index::header"></div>
+	<nav th:replace="layout/index::navbar"></nav>
+
+	<div class="container-fluid">
+
+		<div class="row border">
+			<div class="col-md-12">
+			</div>
+		</div>
+		<div class="row border" style="height: 600px">
+			<!--filters-->
+			<div class="col-md-4 border">
+				<br>
+				<div class="list-group">
+					<a href="#!" class="list-group-item list-group-item-action list-group-item-primary">
+						Busqueda</a>
+				</div>
+				<br>
+				<form  method="get" th:action="@{/search}">
+					<div class="form-group">
+						<label for="formGroupExampleInput2">Buscar Por</label>
+						<select class="custom-select " name="by">
+							<option >Open this select menu</option>
+							<option value="1" selected>Numero Predio</option>
+							<option value="2">Propietario</option>
+							<option value="3">Codigo Catastral</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="formGroupExampleInput">Numero Predio</label>
+						<input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" name="numpredio">
+					</div>
+<!--					<div class="form-group">
+						<label for="formGroupExampleInput2">Another label</label>
+						<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+					</div>-->
+
+
+
+					<button type="submit" class="btn btn-primary mb-2">Buscar</button>
+				</form>
+
+			</div>
+			<!--map-->
+			<div class="col-md-8 border">
+				<br>
+
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>Titulo</th>
+							<th>Descripcion</th>
+							<th>Direccion</th>
+							<th>Tipo</th>
+							<th>Estado</th>
+							<th>Creado</th>
+							<th>Actualizado</th>
+						</tr>
+					</thead>
+
+					<tbody th:unless="${#lists.isEmpty(propiedades)}">
+
+
+
+						<tr th:each="p: ${propiedades}">
+							<th scope="row"><a th:text="${p.id}" th:href="@{property/get/{id}(id=${p.id})}" t></a></th>
+							<td th:text="${p.tituloPropiedad}">Descripcion de la propiedad</td>
+							<td th:text="${p.descripcion}">Jr. Amancaes 234 </td>
+							<td th:text="${p.direccion}">Tipo</td>
+							<td th:text="${p.tipoPropiedad}">En tramite</td>
+							<td th:text="${p.estado}">2021-02-02</td>
+							<td th:text="${p.createOn}">2021-02-02</td>
+							<td th:text="${p.updateOn}">2021-02-02</td>
+							
+						</tr>
+
+					</tbody>
+
+				</table>
+				<div th:if="${#lists.isEmpty(propiedades) and search == true }">
+					<p>No se encontraron propiedades</p>
+				</div>
+
+
+
+
+
+			</div>
+
+		</div>
+
+
+	</div>
+
+
+	<!-- footer -->
+	<footer th:replace="layout/index::footer">
+
+	</footer>
+
+</body>
+
+
+</html>
