@@ -39,7 +39,7 @@
 											th:field="${coordenadas.latitud}">
 										<label for="exampleFormControlInput1">Coordenadas Oeste</label>
 										<input type="text" class="form-control" id="exampleFormControlInput1"
-											 th:field="${coordenadas.longitud}">
+											th:field="${coordenadas.longitud}">
 									</div>
 
 									<button type="button" class="btn btn-success">Submit</button>
@@ -85,12 +85,24 @@
 					</div>
 
 				</div>
+				
+				<p th:text="${founded}" style="display: none;"></p>
+					<div th:if="${geoJsonData == '' }">
+						<p>No se encontraron Datos Geoespaciales Registrados</p>
+					</div>
 			</div>
 			<!--map-->
 			<div class="col-md-6 border">
+				
 				<br>
-				<div id="mapid" style="width: 530px; height: 530px;"></div>
-				<p th:text="${founded}"></p>
+
+
+				<div id="mapid" style="width: 530px; height: 530px;">
+					
+				</div>
+
+
+
 
 
 
@@ -140,7 +152,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<img src="images/legend.png" style="width: 250px" class="rounded mx-auto d-block" alt="...">
+
 			</div>
 		</div>
 
@@ -170,7 +182,7 @@
 							<td th:text="${propiedad.updateOn}">2021-02-02</td>
 							<td th:text="${propiedad.createOn}">2021-02-02</td>
 						</tr>
-						
+
 					</tbody>
 				</table>
 			</div>
@@ -181,7 +193,7 @@
 
 	<!-- footer -->
 	<footer th:replace="layout/index::footer">
-		
+
 	</footer>
 
 </body>
@@ -189,20 +201,21 @@
 	/*<![CDATA[*/
 	var geoJsonData = [[${geoJsonData}]];
 	var lat = [[${coordenadas.latitud}]] ?? -71.257532;
-	var long = [[${coordenadas.longitud}]] ??  -14.970590;
+	var long = [[${coordenadas.longitud}]] ?? -14.970590;
 	console.log(geoJsonData);
-	console.log(lat,long);
+	console.log(lat, long);
         // Utiliza geoJsonData para renderizar tu mapa aquí
 	/*]]>*/
 </script>
 <script>
 
 	var wmsLayer = L.tileLayer.wms('http://localhost:7777/geoserver/curso/wms?service=WMS&', {
-		layers: 'CUSCO_PREDIO_RURAL',
+		//layers: 'CUSCO_PREDIO_RURAL',
+		layers: 'datos_geoespaciales',
 		transparent: true,
 		format: 'image/png',
-		
-		
+
+
 	});
 	var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
 		maxZoom: 20,
@@ -224,19 +237,19 @@
 		"Google Hybrid": googleHybrid
 	};
 	var overlayMaps = {
-    "Predios": wmsLayer
-};
+		"Predios": wmsLayer
+	};
 	var map = L.map('mapid', {
 		center: [lat, long],
 		zoom: 15,
-		layers: [googleHybrid,google,osm,wmsLayer]
+		layers: [googleHybrid, google, osm, wmsLayer]
 
 	});
 
-	var layerControl = L.control.layers(baseMaps,overlayMaps).addTo(map);
+	var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 	L.marker([long, lat]).addTo(map)
-		.bindPopup('A pretty CSS popup.<br> Easily customizable.')
+		.bindPopup('')
 		.openPopup();
 
 	L.geoJSON(JSON.parse(geoJsonData)).addTo(map);
@@ -244,7 +257,7 @@
 
 
 	var popup = L.popup();
-	
+
 	map.panTo(new L.LatLng(long, lat));
 
 	function onMapClick(e) {

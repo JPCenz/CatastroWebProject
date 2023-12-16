@@ -53,6 +53,16 @@ public class UsuarioController {
 	@RequestMapping(path =   "/save", method = RequestMethod.POST)
 	public String guardar(@Validated @ModelAttribute Usuario u, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors()) {
+			System.err.println("usuario"+u);
+			if(u.getId() != null && usuarioService.buscarPorId(u.getId()).isPresent()){
+				var us =usuarioService.buscarPorId(u.getId()).get();
+				if (!us.getHashContrasena().isEmpty()) {
+					if(u.getRol()== null) { u.setRol("USER");}
+					u.setHashContrasena(us.getHashContrasena());
+					usuarioService.grabar(u);
+					return "redirect:/users";
+				}
+			}
 			System.err.println("Se presentaron errores en el formulario!");
 			return "usuarios-form";
 		}
