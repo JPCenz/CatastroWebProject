@@ -25,7 +25,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(
 						authorize -> authorize.requestMatchers("/admin", "/admin/save", "/contenido/save").permitAll()
 								.requestMatchers("src/main/resources/templates", "/users/login", "/css/**", "/img/**",
-										"/register", "/home")
+										"/register", "/home","/users/register")
 								.permitAll().anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/users/login").permitAll().defaultSuccessUrl("/"))
 				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"));
